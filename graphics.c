@@ -8,11 +8,13 @@
 #include "proc.h"
 #include "x86.h"
 
+
+
 static struct {
     ushort  videobuffer[320 * 200];
     int     brushposition;
 } cons_videobuffer;;
-//static ushort *video = (ushort*)P2V(0xA0000);  // video memory
+unsigned short* video_memory = (unsigned short*)P2V(0xA0000);  // video memory
 
 static struct {
 	int x, y;			// Brush position
@@ -27,8 +29,7 @@ void clear320x200x256() {
 	// about faster ways to do it. 
 	//
 	// This function is called from videosetmode.
-
-	unsigned short* video_memory = (unsigned short*)0xA0000;
+	
 
 	int i;
 	for (i=0; i<sizeof(cons_videobuffer.videobuffer); ++i){
@@ -41,17 +42,35 @@ void clear320x200x256() {
 
 
 int sys_setpixel(void) {
+
 	int uX;
 	int uY;
-
+	int testindex = 31999;
+	brushinfo.colour = 15;
 	if (argint(1, &uX) < 0 || argint(2, &uY) < 0) {
 		return -1;
 	}
 
-	unsigned short *video_memory = (unsigned short*)0xA0000;
-	int index = uY * 320 + uX;
-	video_memory[index] = brushinfo.colour;
-
+	for (int i = 20; i>=0; i--)
+	{
+		
+		
+		int index =  320 * uY + uX;
+		index /= 2;
+		cons_videobuffer.videobuffer[index] = 15;
+		cons_videobuffer.videobuffer[ testindex] = 15;
+		memmove(video_memory, &cons_videobuffer.videobuffer[0], sizeof(ushort)*320*200);
+		// Uses the index variable as an index into the array of memory addresses to set a pixel
+		cprintf("%d, %d | ", uX, uY);
+		cprintf("%d | ", index);
+		cprintf("%d\n", video_memory[index]);
+		cprintf("test index:\n");
+		cprintf("%d | ", testindex);
+		cprintf("%d\n", video_memory[testindex]);
+		uX += 10;
+		uY += 10;
+		testindex -= 10;
+	}
 
 	return 1;
 }
@@ -71,7 +90,6 @@ int sys_moveto(void) {
 }
 
 int sys_lineto(void) {
-	unsigned short *video_memory = (unsigned short*)0xA0000;
 	brushinfo.colour = 15;
 
 	int uX;
@@ -80,7 +98,6 @@ int sys_lineto(void) {
 	if (argint(1, &uX) < 0 || argint(2, &uY) < 0) {
 		return -1;
 	}
-	brushinfo.isPressed = 1;
 
 	if (uX < brushinfo.x){	
 			for (int i = uX - brushinfo.x; i<=brushinfo.x; i++) {
