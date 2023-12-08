@@ -60,6 +60,9 @@ int             writei(struct inode*, char*, uint, uint);
 
 // graphics.c 
 void            clear320x200x256();
+int             setpixel(int, int, int);
+int             moveto(int, int, int);
+int             lineto(int, int, int);
 
 // ide.c
 void            ideinit(void);
