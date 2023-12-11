@@ -33,8 +33,9 @@ void clear320x200x256() {
 
 	int i;
 	for (i=0; i<sizeof(cons_videobuffer.videobuffer); ++i){
-		video_memory[i]=0;
+		cons_videobuffer.videobuffer[i]=0;
 	}
+	memmove(video_memory, &cons_videobuffer.videobuffer[0], sizeof(ushort)*320*200);
 
 	return;
 
@@ -99,28 +100,35 @@ int sys_lineto(void) {
 		return -1;
 	}
 
+
+	while (uX > 0)
+	{
+		
+	}
+
+
 	if (uX < brushinfo.x){	
 			for (int i = uX - brushinfo.x; i<=brushinfo.x; i++) {
-				video_memory[uY * 320 + uX] = 15;
+				cons_videobuffer.videobuffer[uY * 320 + uX] = brushinfo.colour;
 				uX++;
 			}
 	}	
 	else {
 		for (int i = uX + brushinfo.x; i>=brushinfo.x; i--) {
-				video_memory[uY * 320 + uX] = 15;
+				cons_videobuffer.videobuffer[uY * 320 + uX] = brushinfo.colour;
 				uX--;
 			}
 	}
 	
 	if (uY <= brushinfo.y){	
 			for (int i = uY - brushinfo.y; i<=brushinfo.y; i++) {
-				video_memory[uY * 320 + uX] = 15;
+				cons_videobuffer.videobuffer[uY * 320 + uX] = brushinfo.colour;
 				uY++;
 			}
 	}	
 	else {
 		for (int i = uY + brushinfo.y; i>=brushinfo.y; i--) {
-				video_memory[uY * 320 + uX] = 15;
+				cons_videobuffer.videobuffer[uY * 320 + uX] = brushinfo.colour;
 				uY--;
 			}
 	}
