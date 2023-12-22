@@ -40,7 +40,11 @@ my @syscalls = (
 				"setpixel",
 				"moveto",
 				"lineto",
-				
+				"setpencolour",
+				"selectpen",
+				"fillrect",
+				"beginpaint",
+				"endpaint"
 			   );
 
 my $i;			   

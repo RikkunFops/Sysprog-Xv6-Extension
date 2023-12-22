@@ -9,6 +9,12 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct Rect {
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+};
 
 // bio.c
 void            binit(void);
@@ -63,6 +69,8 @@ void            clear320x200x256();
 int             setpixel(int, int, int);
 int             moveto(int, int, int);
 int             lineto(int, int, int);
+int             setpencolour(int, int, int, int);
+int             selectpen(int, int);
 
 // ide.c
 void            ideinit(void);

@@ -198,6 +198,10 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_draw\
+	_makepen\
+	_setpen\
+	_fillrect\
+	_multidraw\
 
 fs.img: mkfs $(UPROGS)
 	./mkfs fs.img $(UPROGS)
